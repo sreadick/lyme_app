@@ -1,0 +1,11 @@
+h1, h2 {
+  text-align: center;
+}
+
+.error-message {
+  color: #FF0000;
+}
+
+.success-message {
+  color: #7FFFD4;
+}

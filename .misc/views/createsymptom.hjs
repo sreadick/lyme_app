@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{ title }}</title>
+  </head>
+  <body>
+    <h1>Create Symptom</h1>
+
+    <form action="/api/symptom" method="post">
+      <input type="text" name="name" placeholder="Name" /><br />
+      <input type="number" name="severity" placeholder="Severity" /><br />
+      <input type="submit" value="Create Symptom" />
+    </form>
+  </body>
+</html>

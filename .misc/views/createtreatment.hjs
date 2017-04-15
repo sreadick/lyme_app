@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{ title }}</title>
+  </head>
+  <body>
+    <h1>Create Treatment</h1>
+
+    <form action="/api/treatment" method="post">
+      <input type="text" name="name" placeholder="Name" /><br />
+      <input type="text" name="dose" placeholder="Dose" />
+      <input type="number" name="daily" placeholder="Per Day" /><br />
+      <input type="submit" value="Create Treatment" />
+    </form>
+  </body>
+</html>
