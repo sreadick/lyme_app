@@ -9,3 +9,7 @@ h1, h2 {
 .success-message {
   color: #7FFFD4;
 }
+
+.column {
+  max-width: 550px;
+}

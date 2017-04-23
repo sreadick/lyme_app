@@ -7,6 +7,7 @@ const bodyParser  = require('body-parser');
 const mongoose    = require('mongoose');
 const autRoutes   = require('./server/routes/auth');
 const config      = require('./config');
+const seedDB      = require('./seeds')
 
 // connect to the database and load models
 require('./server/models').connect(config.dbUri);
@@ -20,6 +21,7 @@ app.use(express.static(path.join(__dirname, 'client/dist/')));
 app.use(express.static(path.join(__dirname, 'server/static/')));
 // tell the app to parse HTTP body messages
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 // pass the passport middleware
 app.use(passport.initialize());
 
@@ -32,6 +34,9 @@ passport.use('local-login', localLoginStrategy);
 // pass the authenticaion checker middleware
 const authCheckMiddleware = require('./server/middleware/auth-check');
 app.use('/api', authCheckMiddleware);
+
+// seed database
+// seedDB();
 
 // routes
 const authRoutes = require('./server/routes/auth');

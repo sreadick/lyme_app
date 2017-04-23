@@ -1,36 +1,88 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import Auth from '../modules/Auth';
 import Dashboard from '../components/Dashboard';
+import { connect } from 'react-redux';
+import { fetchCurrentUser, fetchCommonSymptoms, createUserSymptoms } from '../actions'
 
 class DashboardPage extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
 
-    this.state = {
-      secretData: ''
-    };
+    this.addSelectedSymptoms = this.addSelectedSymptoms.bind(this);
   }
-  // This will be executed after initial rendering.
+
   componentDidMount() {
-    const xhr = new XMLHttpRequest();
-    xhr.open('get', '/api/Dashboard');
-    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-    // Set the authorization Http header
-    xhr.setRequestHeader('Authorization', `bearer ${Auth.getToken()}`);
-    xhr.responseType = 'json';
-    xhr.addEventListener('load', () => {
-      if (xhr.status === 200) {
-        this.setState({
-          secretData: xhr.response.message
-        });
+    this.props.fetchCurrentUser();
+    this.props.fetchCommonSymptoms();
+  }
+
+  addSelectedSymptoms(symptomNames) {
+    let id = 0;
+    const userSymptomsList = symptomNames.map(symptomName => {
+      id++;
+      return {
+        name: symptomName,
+        severity: 0,
+        id: id
       }
     });
-    xhr.send()
+    this.props.createUserSymptoms(userSymptomsList)
   }
 
   render() {
-    return (<Dashboard secretData={this.state.secretData} />)
+    return (<Dashboard
+      currentUser={this.props.currentUser}
+      commonSymptoms={this.props.commonSymptoms}
+      addSelectedSymptoms={this.addSelectedSymptoms}/>)
   }
 }
 
-export default DashboardPage;
+DashboardPage.propTypes = {
+  currentUser: PropTypes.object.isRequired,
+  commonSymptoms: PropTypes.array.isRequired,
+  fetchCurrentUser: PropTypes.func.isRequired,
+  fetchCommonSymptoms: PropTypes.func.isRequired,
+  createUserSymptoms: PropTypes.func.isRequired
+}
+
+function mapStateToProps(state) {
+  return {
+    currentUser: state.currentUser,
+    commonSymptoms: state.commonSymptoms
+  }
+}
+
+// function mapDispatchToProps(dispatch) {
+//   return {
+//     fetchCurrentUser: ()
+//     // createUserSymptoms: (symptomList) => {dispatch(createUserSymptoms(symptomList))}
+//   }
+// }
+
+export default connect(mapStateToProps, { fetchCurrentUser, fetchCommonSymptoms, createUserSymptoms })(DashboardPage);
+
+
+
+
+// getSymptomIdByName(symptomName) {
+//   for (let i = 0; i < this.props.commonSymptoms.length; ++i) {
+//     if (this.props.commonSymptoms[i].name === symptomName) {
+//       return this.props.commonSymptoms[i]._id
+//     }
+//   }
+//   return null
+// }
+//
+// createUserSymptomObj(symptomName) {
+//   var obj = {};
+//   obj.name = symptomName;
+//   obj.severity = 0;
+//   obj._id = this.getSymptomIdByName(symptomName);
+//   return obj;
+// }
+//
+// addSelectedSymptoms(symptomNames) {
+//   const userSymptomsList = symptomNames.map(this.createUserSymptomObj);
+//   console.log(userSymptomsList)
+//   this.props.createUserSymptoms(symptomNames)
+// }
