@@ -17,26 +17,42 @@ function getCommonSymptoms(symptoms) {
   }
 }
 
-export const USER_SYMPTOMS_SAVED = "USER_SYMPTOMS_SAVED";
-function assignSymptomsToUser(symptoms) {
+export const USER_SYMPTOM_SAVED = "USER_SYMPTOM_SAVED";
+function addUserSymptom(symptom) {
   return {
-    type: USER_SYMPTOMS_SAVED,
-    symptoms
+    type: USER_SYMPTOM_SAVED,
+    symptom
   }
 }
 
-export const ADD_USER_SYMPTOMS = "ADD_USER_SYMPTOMS";
-export function createUserSymptoms(symptoms) {
+export const USER_SYMPTOMS_FETCHED = "USER_SYMPTOMS_FETCHED";
+function getUserSymptoms(symptoms) {
   return {
-    type: ADD_USER_SYMPTOMS,
+    type: USER_SYMPTOMS_FETCHED,
     symptoms
   }
 }
 
 export const SYMPTOM_SEVERITY_CHANGED = "SYMPTOM_SEVERITY_CHANGED";
-export function updateSeverity(symptom) {
+export function updateSymptomSeverity(symptom) {
   return {
     type: SYMPTOM_SEVERITY_CHANGED,
+    symptom
+  }
+}
+
+export const SYMPTOM_TOGGLED = "SYMPTOM_TOGGLED";
+export function toggleSymptom(symptom) {
+  return {
+    type: SYMPTOM_TOGGLED,
+    symptom
+  }
+}
+
+export const SYMPTOM_DELETED = "SYMPTOM_DELETED";
+export function deleteSymptom(symptom) {
+  return {
+    type: SYMPTOM_DELETED,
     symptom
   }
 }
@@ -57,7 +73,7 @@ export function fetchCurrentUser() {
 
 export function fetchCommonSymptoms() {
   return dispatch => {
-    fetch('/api/commonSymptomList', {
+    fetch('/api/CommonSymptoms', {
       method: 'get',
       headers: {
         'Authorization': `bearer ${Auth.getToken()}`
@@ -68,19 +84,36 @@ export function fetchCommonSymptoms() {
     }
 }
 
-export function saveUserSymptoms(symptoms) {
+export function createUserSymptom(symptomName) {
   return dispatch => {
-    fetch('/api/userSymptomList', {
+    fetch('/api/UserSymptoms', {
       method: 'post',
-      body: JSON.stringify({ symptoms }),
+      body: JSON.stringify({ symptomName }),
       headers: {
         "Content-Type": "application/json",
         'Authorization': `bearer ${Auth.getToken()}`
       }
     })
       .then(res => res.json())
-      .then(() => {
-        // dispatch(assignSymptomsToUser(data.symptoms))
+      .then((data) => {
+        console.log("user symptoms saved")
+        // dispatch(addUserSymptom(data.userSymptom)
+      })
+  }
+}
+
+export function fetchUserSymptoms() {
+  return dispatch => {
+    fetch('/api/UserSymptoms', {
+      method: 'get',
+      headers: {
+        "Content-Type": "application/json",
+        'Authorization': `bearer ${Auth.getToken()}`
+      }
+    })
+      .then(res => res.json())
+      .then((data) => {
+        dispatch(getUserSymptoms(data.symptoms))
       })
   }
 }

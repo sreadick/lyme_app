@@ -5,8 +5,6 @@ const User = require('mongoose').model('User');
 const CommonSymptom = require('mongoose').model('CommonSymptom');
 const UserSymptom = require('../models/userSymptom');
 const config = require('../../config');
-const mongoose = require('mongoose');
-mongoose.Promise = require('bluebird');
 
 router.get('/dashboard', (req, res) => {
   const token = req.headers.authorization.split(' ')[1];
@@ -15,7 +13,7 @@ router.get('/dashboard', (req, res) => {
     if (err) {
       console.log(err);
     }
-    User.findById(userId, function(err, user) {
+    User.findById(userId).populate('symptoms').exec(function(err, user) {
       if (err) {
         console.log(err)
       }
@@ -26,7 +24,7 @@ router.get('/dashboard', (req, res) => {
   })
 });
 
-router.get(`/commonSymptomList`, (req, res) => {
+router.get(`/CommonSymptoms`, (req, res) => {
   CommonSymptom.find({}, function(err, commonSymptoms) {
     if (err) {
       console.log(err);
@@ -37,42 +35,49 @@ router.get(`/commonSymptomList`, (req, res) => {
   });
 })
 
-router.post('/userSymptomList', (req, res) => {
-  console.log(1)
-  console.log("----------------------------------")
-  console.log(req.body)
-  console.log("----------------------------------")
+router.get('/UserSymptoms', (req, res) => {
   const token = req.headers.authorization.split(' ')[1];
   jwt.verify(token, config.jwtSecret, function(err, decoded) {
     const userId = decoded.sub;
     if (err) {
       console.log(err);
     }
-    console.log(2)
+    User.findById(userId).populate('symptoms').exec(function(err, user) {
+      res.status(200).json({ symptoms: user.symptoms })
+    });
+  });
+})
+
+router.post('/UserSymptoms', (req, res) => {
+  const userSymptom = {
+    name: req.body.symptomName,
+    severity: 0
+  }
+  const token = req.headers.authorization.split(' ')[1];
+  jwt.verify(token, config.jwtSecret, function(err, decoded) {
+    const userId = decoded.sub;
+    if (err) {
+      console.log(err);
+    }
     User.findById(userId, function(err, user) {
-      console.log(3)
       if (err) {
         console.log(err);
       }
-      req.body.symptoms.forEach(function(symptom) {
-        console.log(4)
-        UserSymptom.create(symptom, function(err, userSymptom) {
+      UserSymptom.create(userSymptom, function(err, createdUserSymptom) {
+        if (err) {
+          console.log(err);
+        }
+        user.symptoms.push(createdUserSymptom);
+        user.save(function(err) {
           if (err) {
             console.log(err);
           }
-          user.symptoms.push(userSymptom);
-          user.save(function(err) {
-            if (err) {
-              console.log(err);
-            }
-            console.log("symptom saved: " + userSymptom)
-          })
+          console.log("symptom saved: " + createdUserSymptom)
+          res.status(200).json({ userSymptom: createdUserSymptom});
         })
       })
-      res.status(200).json({});
     });
   });
 });
-
 
 module.exports = router;
