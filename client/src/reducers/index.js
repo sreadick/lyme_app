@@ -1,12 +1,13 @@
 import { combineReducers } from 'redux';
-import currentUser from './user-reducer';
-import { commonSymptoms, userSymptoms, selectedSymptoms } from './symptoms-reducer';
+import user from './user-reducer';
+import { commonSymptoms, userSymptoms } from './symptoms-reducer';
+import auth from './auth-reducer';
 
 const rootReducer = combineReducers({
-  currentUser,
+  user,
   commonSymptoms,
   userSymptoms,
-  selectedSymptoms
+  auth
 });
 
 export default rootReducer;

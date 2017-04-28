@@ -3,23 +3,41 @@ var path = require('path');
 
 module.exports = {
   entry: {
-    app: './client/src/app.js'
+    app: path.join(__dirname, 'client/src/app.js')
   },
   output: {
-    filename: './client/dist/build/bundle.js',
-    sourceMapFilename: './client/dist/build/bundle.map'
+    filename: 'bundle.js',
+    path: path.join(__dirname, 'dist'),
+    sourceMapFilename: 'bundle.map'
   },
   devtool: '#source-map',
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.jsx?$/,
         exclude: /(node_modules)/,
-        loader: 'babel-loader',
-        query: {
-          presets: ['react', 'es2015']
-        }
+        use: [
+          {
+            loader: 'babel-loader',
+            query: {
+              presets: ['react', 'es2015']
+            }
+          }
+        ]
       }
     ]
   }
 };
+
+// module: {
+//   loaders: [
+//     {
+//       test: /\.jsx?$/,
+//       exclude: /(node_modules)/,
+//       loader: 'babel-loader',
+//       query: {
+//         presets: ['react', 'es2015']
+//       }
+//     }
+//   ]
+// }

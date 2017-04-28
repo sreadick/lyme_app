@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 class UserSymptom extends React.Component {
   constructor(props) {
@@ -8,12 +9,12 @@ class UserSymptom extends React.Component {
     this.handleOnClick = this.handleOnClick.bind(this);
   }
 
-  handleOnChange() {
+  handleOnChange(e) {
     this.props.updateSeverity({name: this.props.symptom.name, severity: e.target.value, _id: this.props.symptom._id})
   }
 
   handleOnClick() {
-    this.props.deleteSymptom(this.props.symptom)
+    this.props.removeSymptom(this.props.symptom)
   }
 
   render() {

@@ -1,32 +1,41 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import Auth from '../modules/Auth';
 import Dashboard from '../components/Dashboard';
 import { connect } from 'react-redux';
-import { fetchCurrentUser } from '../actions'
+import { fetchUserInfo } from '../actions'
 
 class DashboardPage extends React.Component {
 
   componentWillMount() {
-    this.props.fetchCurrentUser();
+    this.props.fetchUserInfo();
   }
 
   render() {
-    return (<Dashboard currentUser={this.props.currentUser} />)
+    return (
+      <div>
+        {this.props.currentUser && !this.props.isFetching && <Dashboard currentUser={this.props.currentUser} userSymptoms={this.props.userSymptoms} />}
+      </div>
+    )
   }
 }
 
 DashboardPage.propTypes = {
-  currentUser: PropTypes.object.isRequired,
-  fetchCurrentUser: PropTypes.func.isRequired
+  currentUser: PropTypes.object,
+  userSymptoms: PropTypes.object,
+  isFetching: PropTypes.bool.isRequired,
+  fetchUserInfo: PropTypes.func.isRequired
 }
 
 function mapStateToProps(state) {
   return {
-    currentUser: state.currentUser
+    currentUser: state.user.currentUser,
+    userSymptoms: state.userSymptoms,
+    isFetching: state.user.isFetching
   }
 }
 
-export default connect(mapStateToProps, { fetchCurrentUser })(DashboardPage);
+export default connect(mapStateToProps, { fetchUserInfo })(DashboardPage);
 
 // addSelectedSymptoms(symptomNames) {
 //   let id = 0;

@@ -1,11 +1,79 @@
 import fetch from 'isomorphic-fetch';
 import Auth from '../modules/Auth';
 
+export const USER_INFO_REQUESTED = "USER_INFO_REQUESTED";
+export const USER_INFO_RECEIVED = "USER_INFO_RECEIVED";
+export const USER_INFO_REJECTED = "USER_INFO_REJECTED";
+
+function requestUserInfo() {
+  return {
+    type: USER_INFO_REQUESTED
+  }
+}
+
+function receiveUserInfo(user) {
+  return {
+    type: USER_INFO_RECEIVED,
+    user
+  }
+}
+
+function rejectUserInfo(errorMessage) {
+  return {
+    type: USER_INFO_REJECTED,
+    errorMessage
+  }
+}
+
+
+export const LOGIN_REQUESTED = "LOGIN_REQUESTED";
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
-function setCurrentUser(user) {
+export const LOGIN_FAILURE = "LOGIN_FAILURE";
+
+function requestLogin(creds) {
+  return {
+    type: LOGIN_REQUESTED,
+    creds
+  }
+}
+
+function receiveLogin(token) {
   return {
     type: LOGIN_SUCCESS,
-    user
+    token
+  }
+}
+
+function rejectLogin(message) {
+  return {
+    type: LOGIN_FAILURE,
+    message
+  }
+}
+
+export const LOGOUT_REQUEST = "LOGOUT_REQUEST";
+export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
+
+function requestLogout() {
+  return {
+    type: LOGOUT_REQUEST
+  }
+}
+
+function receiveLogout() {
+  return {
+    type: LOGOUT_SUCCESS
+  }
+}
+
+
+
+
+export const USER_SYMPTOMS_RECEIVED = "USER_SYMPTOMS_RECEIVED";
+function receiveUserSymptoms(symptoms) {
+  return {
+    type: USER_SYMPTOMS_RECEIVED,
+    symptoms
   }
 }
 
@@ -17,10 +85,10 @@ function getCommonSymptoms(symptoms) {
   }
 }
 
-export const USER_SYMPTOM_SAVED = "USER_SYMPTOM_SAVED";
+export const USER_SYMPTOM_ADDED = "USER_SYMPTOM_ADDED";
 function addUserSymptom(symptom) {
   return {
-    type: USER_SYMPTOM_SAVED,
+    type: USER_SYMPTOM_ADDED,
     symptom
   }
 }
@@ -34,7 +102,7 @@ function getUserSymptoms(symptoms) {
 }
 
 export const SYMPTOM_SEVERITY_CHANGED = "SYMPTOM_SEVERITY_CHANGED";
-export function updateSymptomSeverity(symptom) {
+export function modifySymptomSeverity(symptom) {
   return {
     type: SYMPTOM_SEVERITY_CHANGED,
     symptom
@@ -42,22 +110,38 @@ export function updateSymptomSeverity(symptom) {
 }
 
 export const SYMPTOM_TOGGLED = "SYMPTOM_TOGGLED";
-export function toggleSymptom(symptom) {
+export function toggleSymptom(symptomName) {
   return {
     type: SYMPTOM_TOGGLED,
-    symptom
+    symptomName
   }
 }
 
-export const SYMPTOM_DELETED = "SYMPTOM_DELETED";
-export function deleteSymptom(symptom) {
+export const SYMPTOM_REMOVED = "SYMPTOM_REMOVED";
+export function removeSymptom(symptom) {
   return {
-    type: SYMPTOM_DELETED,
+    type: SYMPTOM_REMOVED,
     symptom
   }
 }
 
-export function fetchCurrentUser() {
+export const UPDATE_SYMPTOM_SUCCESS = "UPDATE_SYMPTOM_SUCCESS";
+function updateUserSymptom(symptom) {
+  return {
+    type: UPDATE_SYMPTOM_SUCCESS,
+    symptom
+  }
+}
+
+export const SYMPTOM_SUCCESSFULLY_DELETED = "SYMPTOM_SUCCESSFULLY_DELETED";
+export function removeFromToBeRemoved(symptom) {
+  return {
+    type: SYMPTOM_SUCCESSFULLY_DELETED,
+    symptom
+  }
+}
+
+export function fetchUserInfo() {
   return dispatch => {
     fetch(`/api/dashboard`, {
       method: 'get',
@@ -66,8 +150,22 @@ export function fetchCurrentUser() {
         'Authorization': `bearer ${Auth.getToken()}`
       }
     })
-      .then(res => res.json())
-      .then(data => dispatch(setCurrentUser(data.user)));
+    .then(res =>
+      res.json().then(data => ({data, res}))
+        ).then(({data, res}) => {
+      if (!res.ok) {
+        // const errors = data.errors ? data.errors : {};
+        // errors.summary = xhr.response.message;
+        dispatch(rejectUserInfo(data.errors))
+      } else {
+        if (data.user.symptoms.length > 0) {
+          dispatch(receiveUserSymptoms(data.user.symptoms));
+        } else {
+          console.log(data.user)
+        }
+        dispatch(receiveUserInfo(data.user));
+      }
+    })
   }
 }
 
@@ -96,16 +194,18 @@ export function createUserSymptom(symptomName) {
     })
       .then(res => res.json())
       .then((data) => {
-        console.log("user symptoms saved")
-        // dispatch(addUserSymptom(data.userSymptom)
+        console.log("user symptom created: " + data.userSymptom)
+        dispatch(addUserSymptom(data.userSymptom))
       })
   }
 }
 
-export function fetchUserSymptoms() {
+export function saveUserSymptom(symptom) {
+  console.log(symptom)
   return dispatch => {
     fetch('/api/UserSymptoms', {
-      method: 'get',
+      method: 'put',
+      body: JSON.stringify({ symptom }),
       headers: {
         "Content-Type": "application/json",
         'Authorization': `bearer ${Auth.getToken()}`
@@ -113,7 +213,74 @@ export function fetchUserSymptoms() {
     })
       .then(res => res.json())
       .then((data) => {
-        dispatch(getUserSymptoms(data.symptoms))
+        // console.log("user symptom updated: " + data.userSymptom)
+        console.log("user symptom updated: " + data.userSymptom)
+        dispatch(updateUserSymptom(data.userSymptom))
       })
+  }
+}
+
+// export function fetchUserSymptoms() {
+//   return dispatch => {
+//     fetch('/api/UserSymptoms', {
+//       method: 'get',
+//       headers: {
+//         "Content-Type": "application/json",
+//         'Authorization': `bearer ${Auth.getToken()}`
+//       }
+//     })
+//       .then(res => res.json())
+//       .then((data) => {
+//         dispatch(getUserSymptoms(data.symptoms))
+//       })
+//   }
+// }
+
+export function loginUser(credentials) {
+  return dispatch => {
+    dispatch(requestLogin(credentials));
+
+    fetch(`/auth/login`, {
+      method: 'post',
+      body: credentials,
+      headers: {
+        'Content-type': 'application/x-www-form-urlencoded'
+      }
+    })
+      .then(res =>
+        res.json().then(data => ({data, res}))
+          ).then(({data, res}) => {
+        if (!res.ok) {
+          dispatch(rejectLogin(data.message))
+        } else {
+          Auth.authenticateUser(data.token);
+          dispatch(receiveLogin(data.token));
+        }
+      })
+  }
+}
+
+export function deleteSymptom(symptom) {
+  return dispatch => {
+    fetch('/api/UserSymptoms', {
+      method: 'delete',
+      body: JSON.stringify({ symptom }),
+      headers: {
+        "Content-Type": "application/json",
+        'Authorization': `bearer ${Auth.getToken()}`
+      }
+    })
+      .then(res => res.json())
+      .then(() => {
+        dispatch(removeFromToBeRemoved(symptom))
+      })
+  }
+}
+
+export function logoutUser() {
+  return dispatch => {
+    dispatch(requestLogout())
+    Auth.deauthenticateUser();
+    dispatch(receiveLogout())
   }
 }

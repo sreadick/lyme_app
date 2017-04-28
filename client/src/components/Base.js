@@ -5,23 +5,21 @@ import HomePage from './HomePage';
 import LoginPage from '../containers/LoginPage';
 import SignUpPage from '../containers/SignUpPage';
 import DashboardPage from '../containers/DashboardPage';
-
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { loginUser, logoutUser } from '../actions';
 class Base extends Component {
   constructor(props) {
     super(props);
-    this.a = this.a.bind(this);
-  }
 
-  a() {
-    Auth.deauthenticateUser();
   }
 
   render() {
     return (
       <div>
           <Link to="/">Home</Link>
-          {Auth.isUserAuthenticated() ? (
-            <Link to='#' onClick={this.a}>Log Out</Link>
+          {this.props.auth.isAuthenticated && !this.props.auth.isFetching ? (
+            <Link to='#' onClick={this.props.logoutUser}>Log Out</Link>
           ) : (
           <div>
             <Link to="/login">Log In</Link>
@@ -29,7 +27,7 @@ class Base extends Component {
           </div>
           )}
 
-          {Auth.isUserAuthenticated() ? (
+          {this.props.auth.isAuthenticated && !this.props.auth.isFetching ? (
             <Route exact path="/" component={DashboardPage} />
           ) : (
             <Route exact path="/" component={HomePage} />
@@ -41,7 +39,17 @@ class Base extends Component {
   }
 };
 
-export default Base
+Base.propTypes = {
+  auth: PropTypes.object.isRequired
+}
+
+function mapStateToProps(state) {
+  return {
+    auth: state.auth
+  }
+}
+
+export default connect(mapStateToProps, { loginUser, logoutUser })(Base);
 
 // Base.propTypes = {
 //   childView: React.PropTypes.array.isRequired

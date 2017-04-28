@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import AddSymptomsForm from '../components/AddSymptomsForm';
 import { fetchCommonSymptoms, createUserSymptom, toggleSymptom } from '../actions'
@@ -42,8 +43,8 @@ AddSymptomsPage.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    commonSymptoms: state.commonSymptoms,
-    selectedSymptoms: state.selectedSymptoms
+    commonSymptoms: state.commonSymptoms.symptoms,
+    selectedSymptoms: state.commonSymptoms.selected
   }
 }
 

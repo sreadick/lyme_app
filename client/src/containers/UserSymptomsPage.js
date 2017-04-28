@@ -1,59 +1,73 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import UserSymptomsForm from '../components/UserSymptomsForm';
 import { connect } from 'react-redux';
-import { updateSymptomSeverity, saveUserSymptoms, fetchUserSymptoms, deleteSymptom } from '../actions';
+import { modifySymptomSeverity, saveUserSymptom, fetchUserSymptoms, removeSymptom, deleteSymptom } from '../actions';
 
 class UserSymptomsPage extends React.Component {
 
-  // constructor(props, state) {
-  //   super(props, state);
-  //
-  //   this.state = {
-  //     symptomsReceived: false
-  //   }
-  // }
+  constructor(props, state) {
+    super(props, state);
 
-  componentDidMount() {
-    // this.props.fetchUserSymptoms();
+    this.saveUserSymptoms = this.saveUserSymptoms.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    // if (nextProps.symptoms[0].name) {
-    //   this.setState({ symptomsReceived: true });
+  componentWillUpdate(nextProps) {
+    // if (nextProps.userSymptoms.symptoms.length === 0) {
+    //   console.log("true")
+    //   nextProps.userSymptoms.toBeRemoved.forEach(symptom => {
+    //     nextProps.deleteSymptom(symptom)
+    //   })
     // }
+  }
+
+  saveUserSymptoms() {
+    this.props.userSymptoms.symptoms.forEach(symptom => {
+      this.props.saveUserSymptom(symptom);
+    })
+    if (this.props.userSymptoms.toBeRemoved) {
+      this.props.userSymptoms.toBeRemoved.forEach(symptom => {
+        this.props.deleteSymptom(symptom)
+      })
+    }
   }
 
   render() {
     return (
       <div>
-        <UserSymptomsForm symptoms={this.props.symptoms} updateSeverity={this.props.updateSeverity} saveUserSymptoms={this.props.saveUserSymptoms} deleteSymptom={this.props.deleteSymptom}/>
+        <UserSymptomsForm symptoms={this.props.userSymptoms.symptoms} updateSeverity={this.props.updateSeverity} saveUserSymptoms={this.saveUserSymptoms} removeSymptom={this.props.removeSymptom}/>
       </div>
     )
   }
 }
 
 UserSymptomsPage.propTypes = {
+  userSymptoms: PropTypes.object.isRequired,
   updateSeverity: PropTypes.func.isRequired,
-  saveUserSymptoms: PropTypes.func.isRequired,
+  saveUserSymptom: PropTypes.func.isRequired,
+  removeSymptom: PropTypes.func.isRequired,
   deleteSymptom: PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    symptoms: state.currentUser.symptoms
+    userSymptoms: state.userSymptoms
   }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     updateSeverity: (symptom) => {
-      dispatch(updateSymptomSeverity(symptom));
+      dispatch(modifySymptomSeverity(symptom));
     },
-    saveUserSymptoms: (symptoms) => {
-      dispatch(saveUserSymptoms(symptoms));
+    saveUserSymptom: (symptom) => {
+      dispatch(saveUserSymptom(symptom));
     },
     fetchUserSymptoms: () => {
       dispatch(fetchUserSymptoms());
+    },
+    removeSymptom: (symptom) => {
+      dispatch(removeSymptom(symptom))
     },
     deleteSymptom: (symptom) => {
       dispatch(deleteSymptom(symptom))

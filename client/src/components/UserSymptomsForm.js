@@ -1,5 +1,7 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import UserSymptom from './UserSymptom';
+import classNames from 'classnames';
 
 class UserSymptomsForm extends React.Component {
   constructor(props) {
@@ -10,30 +12,35 @@ class UserSymptomsForm extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    this.props.saveUserSymptoms(this.props.userSymptoms);
+    this.props.saveUserSymptoms();
   }
 
   render() {
 
     const emptyMessage = (
-      <p>No symptoms are currently being tracked</p>
+      <div>
+        <p>No symptoms are currently being tracked. Go back to add more.</p>
+        <button className="ui large blue submit button" >Back to symptoms page</button>
+      </div>
     )
 
     return (
       <form className="ui form" onSubmit={this.handleSubmit}>
         {this.props.symptoms.length === 0 ?
-          emptyMessage :
+          <p>No symptoms are currently being tracked. Go back to add more.</p> :
           this.props.symptoms.map(symptom =>
             <UserSymptom
               key={symptom._id}
               symptom={symptom}
               updateSeverity={this.props.updateSeverity}
-              deleteSymptom={this.props.deleteSymptom}
+              removeSymptom={this.props.removeSymptom}
             />
           )
         }
         <div className="field">
-          <button className="ui large blue submit button">Save Symptoms</button>
+          <button className={classNames("ui large submit button", {blue: this.props.symptoms.length === 0}, {green: this.props.symptoms.length > 0} )}>
+            {this.props.symptoms.length > 0 ? "Save Symptoms" : "Go Back"}
+          </button>
         </div>
       </form>
     )
@@ -44,7 +51,7 @@ UserSymptomsForm.propTypes = {
   symptoms: PropTypes.array.isRequired,
   updateSeverity: PropTypes.func.isRequired,
   saveUserSymptoms: PropTypes.func.isRequired,
-  deleteSymptom: PropTypes.func.isRequired
+  removeSymptom: PropTypes.func.isRequired
 }
 
 export default UserSymptomsForm;

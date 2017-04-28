@@ -15,8 +15,6 @@ const store = createStore(
   composeWithDevTools(
     applyMiddleware(thunkMiddleware)
   )
-  // applyMiddleware(thunkMiddleware),
-  // window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
 
 class App extends Component {
@@ -33,30 +31,3 @@ class App extends Component {
 };
 
 ReactDOM.render(<App />, document.getElementById('root'));
-
-// constructor(){
-//   super();
-//   this.handleGetComponent = this.handleGetComponent.bind(this);
-//   this.handleOnEnter = this.handleOnEnter.bind(this);
-// }
-
-// handleGetComponent(location, callback) {
-//   if (Auth.isUserAuthenticated()) {
-//     callback(null, DashboardPage);
-//   } else {
-//     callback(null, HomePage);
-//   }
-// }
-//
-// handleOnEnter(nextState, replace) {
-//   Auth.deauthenticateUser();
-//   replace('/');
-// }
-
-// <div>
-//   <Base />
-//   <Route path="/" getComponent={this.handleGetComponent}/>
-//   <Route path="/login" component={LoginPage}/>
-//   <Route path="/register" component={SignUpPage}/>
-//   <Route path="/logout" onEnter={this.handleOnEnter} />
-// </div>

@@ -80,4 +80,32 @@ router.post('/UserSymptoms', (req, res) => {
   });
 });
 
+router.put('/UserSymptoms', (req, res) => {
+  const token = req.headers.authorization.split(' ')[1];
+  jwt.verify(token, config.jwtSecret, function(err, decoded) {
+    UserSymptom.findByIdAndUpdate(req.body.symptom._id, req.body.symptom, function(err, updatedUserSymptom) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log("symptom updated: " + updatedUserSymptom)
+        res.status(200).json({ userSymptom: req.body.symptom});
+      }
+    });
+  });
+});
+
+router.delete('/UserSymptoms', (req, res) => {
+  const token = req.headers.authorization.split(' ')[1];
+  jwt.verify(token, config.jwtSecret, function(err, decoded) {
+    UserSymptom.findByIdAndRemove(req.body.symptom._id, function(err, deletedSymptom) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log("symptom deleted: " + deletedSymptom);
+        res.status(200).json({ deletedSymptom: deletedSymptom });
+      }
+    });
+  });
+});
+
 module.exports = router;
