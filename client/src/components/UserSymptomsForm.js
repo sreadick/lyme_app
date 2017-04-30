@@ -17,13 +17,6 @@ class UserSymptomsForm extends React.Component {
 
   render() {
 
-    const emptyMessage = (
-      <div>
-        <p>No symptoms are currently being tracked. Go back to add more.</p>
-        <button className="ui large blue submit button" >Back to symptoms page</button>
-      </div>
-    )
-
     return (
       <form className="ui form" onSubmit={this.handleSubmit}>
         {this.props.symptoms.length === 0 ?

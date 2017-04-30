@@ -26,10 +26,7 @@ const auth = (state = INITIAL_STATE, action) => {
         isFetching: true
       });
       case LOGOUT_SUCCESS:
-        return Object.assign({}, state, {
-          isFetching: false,
-          isAuthenticated: false
-        });
+        return INITIAL_STATE
     default:
       return state;
   }

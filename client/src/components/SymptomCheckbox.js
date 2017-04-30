@@ -15,9 +15,13 @@ class SymptomCheckbox extends React.Component {
 
   render() {
     return (
-      <div className="ui checkbox">
-        <input type="checkbox" name="symptom" value={this.props.symptom.name} onClick={this.handleClick}/>
-        <label>{this.props.symptom.name}</label>
+      <div>
+        <div className="field">
+          <div className="ui toggle checkbox">
+            <input type="checkbox" name={this.props.symptom.category} value={this.props.symptom.name} onClick={this.handleClick}/>
+            <label>{this.props.symptom.name}</label>
+          </div>
+        </div>
       </div>
     )
   }

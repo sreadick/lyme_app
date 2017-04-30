@@ -67,8 +67,6 @@ function receiveLogout() {
 }
 
 
-
-
 export const USER_SYMPTOMS_RECEIVED = "USER_SYMPTOMS_RECEIVED";
 function receiveUserSymptoms(symptoms) {
   return {
@@ -77,11 +75,26 @@ function receiveUserSymptoms(symptoms) {
   }
 }
 
-export const COMMON_SYMPTOMS_FETCHED = "COMMON_SYMPTOMS_FETCHED";
-function getCommonSymptoms(symptoms) {
+// export const COMMON_SYMPTOMS_RECEIVED = "COMMON_SYMPTOMS_RECEIVED";
+// function getCommonSymptoms(symptoms) {
+//   return {
+//     type: COMMON_SYMPTOMS_RECEIVED,
+//     symptoms
+//   }
+// }
+
+export const COMMON_SYMPTOMS_RECEIVED = "COMMON_SYMPTOMS_RECEIVED";
+function receiveCommonSymptoms(symptoms) {
   return {
-    type: COMMON_SYMPTOMS_FETCHED,
+    type: COMMON_SYMPTOMS_RECEIVED,
     symptoms
+  }
+}
+
+export const COMMON_SYMPTOMS_REQUESTED = "COMMON_SYMPTOMS_REQUESTED";
+function requestCommonSymptoms() {
+  return {
+    type: COMMON_SYMPTOMS_REQUESTED
   }
 }
 
@@ -90,14 +103,6 @@ function addUserSymptom(symptom) {
   return {
     type: USER_SYMPTOM_ADDED,
     symptom
-  }
-}
-
-export const USER_SYMPTOMS_FETCHED = "USER_SYMPTOMS_FETCHED";
-function getUserSymptoms(symptoms) {
-  return {
-    type: USER_SYMPTOMS_FETCHED,
-    symptoms
   }
 }
 
@@ -171,6 +176,8 @@ export function fetchUserInfo() {
 
 export function fetchCommonSymptoms() {
   return dispatch => {
+    dispatch(requestCommonSymptoms());
+
     fetch('/api/CommonSymptoms', {
       method: 'get',
       headers: {
@@ -178,7 +185,9 @@ export function fetchCommonSymptoms() {
       }
     })
       .then(res => res.json())
-      .then(data => dispatch(getCommonSymptoms(data.symptoms)));
+      .then(data =>
+        dispatch(receiveCommonSymptoms(data.symptoms))
+      );
     }
 }
 

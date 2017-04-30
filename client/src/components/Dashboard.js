@@ -3,12 +3,13 @@ import { Dropdown, Button, Checkbox } from 'semantic-ui-react';
 import UserSymptomsPage from '../containers/UserSymptomsPage'
 import AddSymptomsPage from '../containers/AddSymptomsPage'
 
+// <h1>Welcome {this.props.currentUser.name}</h1>
+
 class Dashboard extends React.Component {
 
   render() {
     return (
       <div>
-        <h1>Welcome {this.props.currentUser.name}</h1>
         {this.props.userSymptoms.symptoms.length === 0 && this.props.userSymptoms.toBeRemoved.length === 0 ? <AddSymptomsPage /> : <UserSymptomsPage />}
       </div>
     )

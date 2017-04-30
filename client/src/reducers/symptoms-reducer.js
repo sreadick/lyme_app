@@ -1,15 +1,14 @@
-import { USER_SYMPTOMS_RECEIVED, USER_SYMPTOM_ADDED, UPDATE_SYMPTOM_SUCCESS, USER_SYMPTOMS_FETCHED, SYMPTOM_SEVERITY_CHANGED, SYMPTOM_REMOVED, COMMON_SYMPTOMS_FETCHED, SYMPTOM_TOGGLED, SYMPTOM_SUCCESSFULLY_DELETED } from '../actions';
-
-export const userSymptoms = (state = {
+import { USER_SYMPTOMS_RECEIVED, USER_SYMPTOM_ADDED, UPDATE_SYMPTOM_SUCCESS, USER_SYMPTOMS_FETCHED, SYMPTOM_SEVERITY_CHANGED, SYMPTOM_REMOVED, COMMON_SYMPTOMS_REQUESTED, COMMON_SYMPTOMS_RECEIVED, SYMPTOM_TOGGLED, SYMPTOM_SUCCESSFULLY_DELETED, LOGOUT_SUCCESS } from '../actions';
+const INITIAL_STATE = {
   isFetching: false, symptoms: [], toBeRemoved: []
-}, action) => {
+}
+
+export const userSymptoms = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case USER_SYMPTOMS_RECEIVED:
-      return Object.assign({}, state, { symptoms: action.symptoms });
+      return Object.assign({}, state, { symptoms: [...action.symptoms] });
     case USER_SYMPTOM_ADDED:
       return Object.assign({}, state, { symptoms: [...state.symptoms, action.symptom] });
-    case USER_SYMPTOMS_FETCHED:
-      return Object.assign({}, state, { symptoms: action.symptoms});
     case SYMPTOM_SEVERITY_CHANGED:
       const updatedUserSymptoms = state.symptoms.map(symptom => {
         if (symptom.name === action.symptom.name) {
@@ -37,15 +36,21 @@ export const userSymptoms = (state = {
       });
     case SYMPTOM_SUCCESSFULLY_DELETED:
       return Object.assign({}, state, { toBeRemoved: state.toBeRemoved.filter(symptom => symptom._id !== action.symptom._id) });
+    case LOGOUT_SUCCESS:
+      return INITIAL_STATE;
     default:
       return state
   }
 }
 
-export const commonSymptoms = (state = { symptoms: [], selected: [] }, action) => {
+export const commonSymptoms = (state = { isFetching: false, symptoms: [], selected: [] }, action) => {
   switch (action.type) {
-    case COMMON_SYMPTOMS_FETCHED:
-      return Object.assign({}, state, { symptoms: action.symptoms })
+    // case COMMON_SYMPTOMS_FETCHED:
+    //   return Object.assign({}, state, { symptoms: action.symptoms })
+    case COMMON_SYMPTOMS_RECEIVED:
+      return Object.assign({}, state, { isFetching: false, symptoms: action.symptoms })
+    case COMMON_SYMPTOMS_REQUESTED:
+      return Object.assign({}, state, { isFetching: true })
     case SYMPTOM_TOGGLED:
       if (state.selected.includes(action.symptomName)) {
         return Object.assign({}, state, { selected: state.selected.filter(symptomName => symptomName !== action.symptomName) });
@@ -53,6 +58,8 @@ export const commonSymptoms = (state = { symptoms: [], selected: [] }, action) =
       return Object.assign({}, state, { selected: [...state.selected, action.symptomName] });
     case SYMPTOM_REMOVED:
       return Object.assign({}, state, { selected: state.selected.filter(symptomName => symptomName !== action.symptom.name) });
+    case LOGOUT_SUCCESS:
+      return { isFetching: false, symptoms: [], selected: [] };
     default:
       return state
   }
