@@ -17677,16 +17677,6 @@ var UserSymptomsPage = function (_React$Component) {
   }
 
   _createClass(UserSymptomsPage, [{
-    key: 'componentWillUpdate',
-    value: function componentWillUpdate(nextProps) {
-      // if (nextProps.userSymptoms.symptoms.length === 0) {
-      //   console.log("true")
-      //   nextProps.userSymptoms.toBeRemoved.forEach(symptom => {
-      //     nextProps.deleteSymptom(symptom)
-      //   })
-      // }
-    }
-  }, {
     key: 'saveUserSymptoms',
     value: function saveUserSymptoms() {
       var _this2 = this;
@@ -33314,49 +33304,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-// constructor(props, state) {
-//   super(props, state);
-//
-//   this.state = {
-//     csListByCategory: []
-//   }
-//
-// }
-
-// componentDidMount(nextProps) {
-//   // create an array of objects where the each object contains a category-label and a list of symptoms by that category
-//   nextProps.commonSymptoms.forEach((symptom, index, array) => {
-//     if (index === 0 || array[index - 1].category !== symptom.category) {
-//       let category = symptom.category;
-//       this.setState({
-//         csListByCategory: [...this.state.csListByCategory, {category: category, id: index, symptoms: nextProps.commonSymptoms.filter(s => s.category === category)} ]
-//       });
-//     } else {
-//       this.setState({item: "empty"});
-//     }
-//   })
-// }
-//
-// render() {
-//   return (
-//     <div className="ui centered grid">
-//       <form className="ui form">
-//         <p>To get started, select your symptoms from the list below:</p>
-//           {this.state.csListByCategory.length > 0 && this.state.csListByCategory.map((symptomGroup, index, array) =>
-//             <div className="grouped fields">
-//               <label className="group-label" htmlFor={symptomGroup.category}>{symptomGroup.category} :</label>
-//               symptomGroup.sympoms.map((symptom) =>
-//                 <SymptomCheckbox key={symptom._id} symptom={symptom} toggleSelectedSymptom={this.props.toggleSelectedSymptom} />
-//               )
-//             </div>
-//           )}
-//         <button className="ui purple inverted submit button" onClick={(e) => {e.preventDefault(); this.props.addSelectedSymptoms()}}>Add Symptoms</button>
-//       </form>
-//     </div>
-//   )
-// }
-
-
 var AddSymptomsForm = function (_React$Component) {
   _inherits(AddSymptomsForm, _React$Component);
 
@@ -33934,15 +33881,40 @@ var UserSymptom = function (_React$Component) {
 
     var _this = _possibleConstructorReturn(this, (UserSymptom.__proto__ || Object.getPrototypeOf(UserSymptom)).call(this, props));
 
-    _this.handleOnChange = _this.handleOnChange.bind(_this);
     _this.handleOnClick = _this.handleOnClick.bind(_this);
+    _this.changeSeverity = _this.changeSeverity.bind(_this);
+    _this.handleMouseOver = _this.handleMouseOver.bind(_this);
+    _this.handleMouseOut = _this.handleMouseOut.bind(_this);
     return _this;
   }
 
   _createClass(UserSymptom, [{
-    key: 'handleOnChange',
-    value: function handleOnChange(e) {
-      this.props.updateSeverity({ name: this.props.symptom.name, severity: e.target.value, _id: this.props.symptom._id });
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+      var severity = nextProps.symptom.severity;
+
+      var sevSquares = this.refs.severity_container;
+      for (var i = 0; i < 10; ++i) {
+        if (Number(sevSquares.childNodes[i].innerHTML) <= severity) {
+          sevSquares.childNodes[i].classList.add("highlighted");
+        } else {
+          sevSquares.childNodes[i].classList.remove("highlighted");
+        }
+      }
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      var severity = this.props.symptom.severity;
+
+      var sevSquares = this.refs.severity_container;
+      for (var i = 0; i < 10; ++i) {
+        if (Number(sevSquares.childNodes[i].innerHTML) <= severity) {
+          sevSquares.childNodes[i].classList.add("highlighted");
+        } else {
+          sevSquares.childNodes[i].classList.remove("highlighted");
+        }
+      }
     }
   }, {
     key: 'handleOnClick',
@@ -33950,26 +33922,125 @@ var UserSymptom = function (_React$Component) {
       this.props.removeSymptom(this.props.symptom);
     }
   }, {
+    key: 'changeSeverity',
+    value: function changeSeverity(severity) {
+      this.props.updateSeverity({ name: this.props.symptom.name, severity: severity, _id: this.props.symptom._id });
+    }
+  }, {
+    key: 'handleMouseOver',
+    value: function handleMouseOver(e) {
+      if (e.target.className.includes("severity_square")) {
+        var sevSquares = e.target.parentNode;
+        for (var i = 0; i < Number(e.target.innerHTML); ++i) {
+          sevSquares.childNodes[i].classList.add("highlighted");
+        }
+      }
+    }
+  }, {
+    key: 'handleMouseOut',
+    value: function handleMouseOut(e) {
+      if (e.target.className.includes("severity_square")) {
+        var sevSquares = e.target.parentNode;
+        for (var i = 0; i < 10; ++i) {
+          if (Number(sevSquares.childNodes[i].innerHTML) <= this.props.symptom.severity) {
+            sevSquares.childNodes[i].classList.add("highlighted");
+          } else {
+            sevSquares.childNodes[i].classList.remove("highlighted");
+          }
+        }
+      }
+    }
+  }, {
     key: 'render',
     value: function render() {
+      var _this2 = this;
+
       return _react2.default.createElement(
         'div',
-        null,
+        { className: 'ui very padded container segment user_symptom' },
         _react2.default.createElement(
           'h3',
           null,
-          this.props.symptom.name
+          this.props.symptom.name,
+          _react2.default.createElement('i', { className: 'remove icon', onClick: this.handleOnClick })
         ),
-        _react2.default.createElement('i', { className: 'remove icon', onClick: this.handleOnClick }),
         _react2.default.createElement(
           'div',
-          { className: 'field' },
+          null,
           _react2.default.createElement(
-            'label',
-            null,
-            'severity: '
-          ),
-          _react2.default.createElement('input', { type: 'number', value: this.props.symptom.severity, onChange: this.handleOnChange })
+            'div',
+            { className: 'severity_container', ref: 'severity_container', onMouseOver: this.handleMouseOver, onMouseOut: this.handleMouseOut },
+            _react2.default.createElement(
+              'div',
+              { className: 'severity_square', onClick: function onClick() {
+                  return _this2.changeSeverity(1);
+                } },
+              '1'
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'severity_square', onClick: function onClick() {
+                  return _this2.changeSeverity(2);
+                } },
+              '2'
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'severity_square', onClick: function onClick() {
+                  return _this2.changeSeverity(3);
+                } },
+              '3'
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'severity_square', onClick: function onClick() {
+                  return _this2.changeSeverity(4);
+                } },
+              '4'
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'severity_square', onClick: function onClick() {
+                  return _this2.changeSeverity(5);
+                } },
+              '5'
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'severity_square', onClick: function onClick() {
+                  return _this2.changeSeverity(6);
+                } },
+              '6'
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'severity_square', onClick: function onClick() {
+                  return _this2.changeSeverity(7);
+                } },
+              '7'
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'severity_square', onClick: function onClick() {
+                  return _this2.changeSeverity(8);
+                } },
+              '8'
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'severity_square', onClick: function onClick() {
+                  return _this2.changeSeverity(9);
+                } },
+              '9'
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'severity_square', onClick: function onClick() {
+                  return _this2.changeSeverity(10);
+                } },
+              '10'
+            )
+          )
         )
       );
     }
@@ -34046,27 +34117,40 @@ var UserSymptomsForm = function (_React$Component) {
       var _this2 = this;
 
       return _react2.default.createElement(
-        'form',
-        { className: 'ui form', onSubmit: this.handleSubmit },
-        this.props.symptoms.length === 0 ? _react2.default.createElement(
-          'p',
-          null,
-          'No symptoms are currently being tracked. Go back to add more.'
-        ) : this.props.symptoms.map(function (symptom) {
-          return _react2.default.createElement(_UserSymptom2.default, {
-            key: symptom._id,
-            symptom: symptom,
-            updateSeverity: _this2.props.updateSeverity,
-            removeSymptom: _this2.props.removeSymptom
-          });
-        }),
+        'div',
+        { className: 'ui centered very padded container' },
         _react2.default.createElement(
-          'div',
-          { className: 'field' },
+          'form',
+          { id: 'user_symptoms_form', className: 'ui form', onSubmit: this.handleSubmit },
+          this.props.symptoms.length === 0 ? _react2.default.createElement(
+            'p',
+            null,
+            'No symptoms are currently being tracked. Go back to add more'
+          ) : _react2.default.createElement(
+            'div',
+            null,
+            _react2.default.createElement(
+              'p',
+              null,
+              'From 1 to 10, indicate the general severity of each symptom'
+            ),
+            this.props.symptoms.map(function (symptom) {
+              return _react2.default.createElement(_UserSymptom2.default, {
+                key: symptom._id,
+                symptom: symptom,
+                updateSeverity: _this2.props.updateSeverity,
+                removeSymptom: _this2.props.removeSymptom
+              });
+            })
+          ),
           _react2.default.createElement(
-            'button',
-            { className: (0, _classnames2.default)("ui large submit button", { blue: this.props.symptoms.length === 0 }, { green: this.props.symptoms.length > 0 }) },
-            this.props.symptoms.length > 0 ? "Save Symptoms" : "Go Back"
+            'div',
+            { className: 'field' },
+            _react2.default.createElement(
+              'button',
+              { className: (0, _classnames2.default)("ui large submit button", { blue: this.props.symptoms.length === 0 }, { green: this.props.symptoms.length > 0 }) },
+              this.props.symptoms.length > 0 ? "Save Symptoms" : "Go Back"
+            )
           )
         )
       );
@@ -34313,7 +34397,6 @@ var userSymptoms = exports.userSymptoms = function userSymptoms() {
     case _actions.SYMPTOM_REMOVED:
       var toBeRemoved = state.toBeRemoved;
       toBeRemoved.push(action.symptom);
-
       return Object.assign({}, state, {
         symptoms: state.symptoms.filter(function (symptom) {
           return symptom._id !== action.symptom._id;

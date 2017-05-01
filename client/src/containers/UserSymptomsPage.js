@@ -12,15 +12,6 @@ class UserSymptomsPage extends React.Component {
     this.saveUserSymptoms = this.saveUserSymptoms.bind(this);
   }
 
-  componentWillUpdate(nextProps) {
-    // if (nextProps.userSymptoms.symptoms.length === 0) {
-    //   console.log("true")
-    //   nextProps.userSymptoms.toBeRemoved.forEach(symptom => {
-    //     nextProps.deleteSymptom(symptom)
-    //   })
-    // }
-  }
-
   saveUserSymptoms() {
     this.props.userSymptoms.symptoms.forEach(symptom => {
       this.props.saveUserSymptom(symptom);

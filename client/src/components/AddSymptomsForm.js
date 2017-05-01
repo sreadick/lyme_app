@@ -1,50 +1,6 @@
 import React, { PropTypes } from 'react';
 import SymptomCheckbox from './SymptomCheckbox';
 
-// constructor(props, state) {
-//   super(props, state);
-//
-//   this.state = {
-//     csListByCategory: []
-//   }
-//
-// }
-
-// componentDidMount(nextProps) {
-//   // create an array of objects where the each object contains a category-label and a list of symptoms by that category
-//   nextProps.commonSymptoms.forEach((symptom, index, array) => {
-//     if (index === 0 || array[index - 1].category !== symptom.category) {
-//       let category = symptom.category;
-//       this.setState({
-//         csListByCategory: [...this.state.csListByCategory, {category: category, id: index, symptoms: nextProps.commonSymptoms.filter(s => s.category === category)} ]
-//       });
-//     } else {
-//       this.setState({item: "empty"});
-//     }
-//   })
-// }
-//
-// render() {
-//   return (
-//     <div className="ui centered grid">
-//       <form className="ui form">
-//         <p>To get started, select your symptoms from the list below:</p>
-//           {this.state.csListByCategory.length > 0 && this.state.csListByCategory.map((symptomGroup, index, array) =>
-//             <div className="grouped fields">
-//               <label className="group-label" htmlFor={symptomGroup.category}>{symptomGroup.category} :</label>
-//               symptomGroup.sympoms.map((symptom) =>
-//                 <SymptomCheckbox key={symptom._id} symptom={symptom} toggleSelectedSymptom={this.props.toggleSelectedSymptom} />
-//               )
-//             </div>
-//           )}
-//         <button className="ui purple inverted submit button" onClick={(e) => {e.preventDefault(); this.props.addSelectedSymptoms()}}>Add Symptoms</button>
-//       </form>
-//     </div>
-//   )
-// }
-
-
-
 class AddSymptomsForm extends React.Component {
 
   render() {

@@ -21,7 +21,7 @@
 }
 
 #add_symptoms_form h3 {
-  font-family: 'Inconsolata', monospace;
+  font-family: 'Lato', sans-serif;
 }
 
 
@@ -34,4 +34,41 @@
   display: flex;
   flex-flow: column wrap;
   max-height: 1500px;
+}
+
+.severity_container {
+  margin: 0 auto;
+  width: 550px;
+  height: 50px;
+}
+
+.severity_square {
+  text-align: center;
+  display: inline-block;
+  margin: 0 1%;
+  border-radius: 10px;
+  width: 8%;
+  height: 100%;
+  border: solid 1px #ddd;
+  line-height: 50px;
+}
+
+.severity_square:hover {
+  cursor: pointer;
+}
+
+.highlighted {
+  background: #C589CE;
+  color: white;
+}
+
+#user_symptoms_form {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.remove.icon:hover {
+  cursor: pointer;
+  color: red;
 }

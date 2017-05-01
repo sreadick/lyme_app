@@ -29,7 +29,6 @@ export const userSymptoms = (state = INITIAL_STATE, action) => {
     case SYMPTOM_REMOVED:
       const toBeRemoved = state.toBeRemoved;
       toBeRemoved.push(action.symptom);
-
       return Object.assign({}, state, {
         symptoms: state.symptoms.filter(symptom => symptom._id !== action.symptom._id),
         toBeRemoved
