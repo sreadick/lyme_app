@@ -68,7 +68,7 @@ class UserSymptom extends React.Component {
   render() {
     return (
       <div className="ui very padded container segment user_symptom">
-        <h3>{this.props.symptom.name}<i className="remove icon" onClick={this.handleOnClick}></i></h3>
+        <h4>{this.props.symptom.name}<i className="remove icon" onClick={this.handleOnClick}></i></h4>
         <div>
           <div className="severity_container" ref="severity_container" onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
             <div className="severity_square" onClick={() => this.changeSeverity(1)}>1</div>

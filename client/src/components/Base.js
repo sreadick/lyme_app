@@ -25,10 +25,6 @@ import { loginUser, logoutUser } from '../actions';
 //   </div>
 
 class Base extends Component {
-  constructor(props) {
-    super(props);
-
-  }
 
   render() {
     return (

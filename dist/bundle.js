@@ -17220,38 +17220,47 @@ var HomePage = function (_Component) {
     value: function render() {
       return _react2.default.createElement(
         'div',
-        { className: 'ui centered grid' },
+        { className: 'landing_container' },
         _react2.default.createElement(
           'div',
-          { className: 'row' },
+          { className: 'ui centered grid' },
           _react2.default.createElement(
-            'h1',
-            null,
-            'LymeApp'
-          )
-        ),
-        _react2.default.createElement(
-          'div',
-          { className: 'row' },
-          _react2.default.createElement(
-            'p',
-            null,
-            'Track your lyme symptoms with the click of a button'
-          )
-        ),
-        _react2.default.createElement(
-          'div',
-          { className: 'row' },
-          _react2.default.createElement(
-            'p',
-            null,
-            'Sign in below or ',
+            'div',
+            { className: 'row' },
             _react2.default.createElement(
-              _reactRouterDom.Link,
-              { to: '/register' },
-              'create an account '
-            ),
-            '.'
+              'h1',
+              null,
+              'LymeApp'
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'row' },
+            _react2.default.createElement(
+              'p',
+              null,
+              'Track your lyme symptoms with the click of a button'
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'row' },
+            _react2.default.createElement(
+              'p',
+              null,
+              _react2.default.createElement(
+                _reactRouterDom.Link,
+                { to: '/login' },
+                'Sign in'
+              ),
+              ' or ',
+              _react2.default.createElement(
+                _reactRouterDom.Link,
+                { to: '/register' },
+                'create an account '
+              ),
+              '.'
+            )
           )
         )
       );
@@ -33021,10 +33030,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var Base = function (_Component) {
   _inherits(Base, _Component);
 
-  function Base(props) {
+  function Base() {
     _classCallCheck(this, Base);
 
-    return _possibleConstructorReturn(this, (Base.__proto__ || Object.getPrototypeOf(Base)).call(this, props));
+    return _possibleConstructorReturn(this, (Base.__proto__ || Object.getPrototypeOf(Base)).apply(this, arguments));
   }
 
   _createClass(Base, [{
@@ -33329,10 +33338,10 @@ var AddSymptomsForm = function (_React$Component) {
         _react2.default.createElement(
           'div',
           { id: 'flex_container' },
-          this.props.commonSymptomList.map(function (symptomGroup) {
+          this.props.commonSymptomList.map(function (symptomGroup, index) {
             return _react2.default.createElement(
               'div',
-              { className: 'grouped inline fields' },
+              { className: 'grouped inline fields', key: index },
               _react2.default.createElement(
                 'label',
                 { htmlFor: symptomGroup[0].category },
@@ -33485,45 +33494,49 @@ var LoginForm = function (_Component) {
     value: function render() {
       return _react2.default.createElement(
         "div",
-        { className: "ui middle aligned center aligned grid" },
+        { className: "login_container" },
         _react2.default.createElement(
           "div",
-          { className: "column" },
+          { className: "ui middle aligned center aligned grid" },
           _react2.default.createElement(
-            "form",
-            { className: "ui large form", action: "/", onSubmit: this.props.onSubmit },
+            "div",
+            { className: "column" },
             _react2.default.createElement(
-              "h2",
-              null,
-              "Sign In"
-            ),
-            this.props.successMessage && _react2.default.createElement(
-              "p",
-              { className: "successMessage" },
-              this.props.successMessage
-            ),
-            this.props.errors.message && _react2.default.createElement(
-              "p",
-              { className: "error-message" },
-              this.props.errors.message
-            ),
-            _react2.default.createElement(
-              "div",
-              { className: "field" },
-              _react2.default.createElement("input", { type: "email", name: "email", className: "ui input", placeholder: "Email", onChange: this.props.onChange })
-            ),
-            _react2.default.createElement(
-              "div",
-              { className: "field" },
-              _react2.default.createElement("input", { type: "password", name: "password", className: "ui input", placeholder: "Password", onChange: this.props.onChange })
-            ),
-            _react2.default.createElement(
-              "div",
-              { className: "field" },
+              "form",
+              { className: "ui large form", action: "/", onSubmit: this.props.onSubmit },
               _react2.default.createElement(
-                "button",
-                { className: "ui fluid large teal submit button" },
-                "Sign In!"
+                "h2",
+                null,
+                "Sign In"
+              ),
+              this.props.successMessage && _react2.default.createElement(
+                "p",
+                { className: "successMessage" },
+                this.props.successMessage
+              ),
+              this.props.errors.message && _react2.default.createElement(
+                "p",
+                { className: "error-message" },
+                this.props.errors.message
+              ),
+              _react2.default.createElement(
+                "div",
+                { className: "field" },
+                _react2.default.createElement("input", { type: "email", name: "email", className: "ui input", placeholder: "Email", onChange: this.props.onChange })
+              ),
+              _react2.default.createElement(
+                "div",
+                { className: "field" },
+                _react2.default.createElement("input", { type: "password", name: "password", className: "ui input", placeholder: "Password", onChange: this.props.onChange })
+              ),
+              _react2.default.createElement(
+                "div",
+                { className: "field" },
+                _react2.default.createElement(
+                  "button",
+                  { className: "ui fluid large teal submit button" },
+                  "Sign In!"
+                )
               )
             )
           )
@@ -33594,6 +33607,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+// {this.props.user.currentUser && <NavLink className="item" activeClassName="active" exact to="/symptoms">My Symptoms</NavLink> }
 
 var Navbar = function (_Component) {
   _inherits(Navbar, _Component);
@@ -33705,45 +33720,49 @@ var SignUpForm = function (_Component) {
     value: function render() {
       return _react2.default.createElement(
         "div",
-        { className: "ui middle aligned center aligned grid" },
+        { className: "register_container" },
         _react2.default.createElement(
           "div",
-          { className: "column" },
+          { className: "ui middle aligned center aligned grid" },
           _react2.default.createElement(
-            "form",
-            { className: "ui large form", action: "/", onSubmit: this.props.onSubmit },
+            "div",
+            { className: "column" },
             _react2.default.createElement(
-              "h2",
-              null,
-              "Create An Account"
-            ),
-            this.props.errors.summary && _react2.default.createElement(
-              "p",
-              { className: "error-message" },
-              this.props.errors.summary
-            ),
-            _react2.default.createElement(
-              "div",
-              { className: "field" },
-              _react2.default.createElement("input", { type: "text", name: "name", className: "ui input", placeholder: "Name", onChange: this.props.onChange })
-            ),
-            _react2.default.createElement(
-              "div",
-              { className: "field" },
-              _react2.default.createElement("input", { type: "email", name: "email", className: "ui input", placeholder: "Email", onChange: this.props.onChange })
-            ),
-            _react2.default.createElement(
-              "div",
-              { className: "field" },
-              _react2.default.createElement("input", { type: "password", name: "password", className: "ui input", placeholder: "Password", onChange: this.props.onChange })
-            ),
-            _react2.default.createElement(
-              "div",
-              { className: "field" },
+              "form",
+              { className: "ui large form", action: "/", onSubmit: this.props.onSubmit },
               _react2.default.createElement(
-                "button",
-                { className: "ui fluid large green submit button" },
-                "Register"
+                "h2",
+                null,
+                "Create An Account"
+              ),
+              this.props.errors.summary && _react2.default.createElement(
+                "p",
+                { className: "error-message" },
+                this.props.errors.summary
+              ),
+              _react2.default.createElement(
+                "div",
+                { className: "field" },
+                _react2.default.createElement("input", { type: "text", name: "name", className: "ui input", placeholder: "Name", onChange: this.props.onChange })
+              ),
+              _react2.default.createElement(
+                "div",
+                { className: "field" },
+                _react2.default.createElement("input", { type: "email", name: "email", className: "ui input", placeholder: "Email", onChange: this.props.onChange })
+              ),
+              _react2.default.createElement(
+                "div",
+                { className: "field" },
+                _react2.default.createElement("input", { type: "password", name: "password", className: "ui input", placeholder: "Password", onChange: this.props.onChange })
+              ),
+              _react2.default.createElement(
+                "div",
+                { className: "field" },
+                _react2.default.createElement(
+                  "button",
+                  { className: "ui fluid large green submit button" },
+                  "Register"
+                )
               )
             )
           )
@@ -33959,7 +33978,7 @@ var UserSymptom = function (_React$Component) {
         'div',
         { className: 'ui very padded container segment user_symptom' },
         _react2.default.createElement(
-          'h3',
+          'h4',
           null,
           this.props.symptom.name,
           _react2.default.createElement('i', { className: 'remove icon', onClick: this.handleOnClick })
@@ -34118,19 +34137,19 @@ var UserSymptomsForm = function (_React$Component) {
 
       return _react2.default.createElement(
         'div',
-        { className: 'ui centered very padded container' },
+        { className: 'ui centered container' },
         _react2.default.createElement(
           'form',
           { id: 'user_symptoms_form', className: 'ui form', onSubmit: this.handleSubmit },
           this.props.symptoms.length === 0 ? _react2.default.createElement(
-            'p',
+            'h3',
             null,
             'No symptoms are currently being tracked. Go back to add more'
           ) : _react2.default.createElement(
             'div',
             null,
             _react2.default.createElement(
-              'p',
+              'h3',
               null,
               'From 1 to 10, indicate the general severity of each symptom'
             ),
@@ -34148,7 +34167,7 @@ var UserSymptomsForm = function (_React$Component) {
             { className: 'field' },
             _react2.default.createElement(
               'button',
-              { className: (0, _classnames2.default)("ui large submit button", { blue: this.props.symptoms.length === 0 }, { green: this.props.symptoms.length > 0 }) },
+              { id: 'save_symptoms_button', className: (0, _classnames2.default)("ui large submit button", { blue: this.props.symptoms.length === 0 }, { green: this.props.symptoms.length > 0 }) },
               this.props.symptoms.length > 0 ? "Save Symptoms" : "Go Back"
             )
           )
@@ -34310,8 +34329,12 @@ Object.defineProperty(exports, "__esModule", {
 
 var _actions = __webpack_require__(62);
 
-var INITIAL_STATE = { isFetching: false, isAuthenticated: false, errors: {} };
-// const INITIAL_STATE = { isFetching: false, isAuthenticated: localStorage.getItem('token') ? true : false };
+var INITIAL_STATE = {
+  isFetching: false,
+  isAuthenticated: !!localStorage.getItem('token') ? true : false,
+  errors: {}, token: localStorage.getItem('token') || null,
+  creds: null
+};
 
 var auth = function auth() {
   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : INITIAL_STATE;

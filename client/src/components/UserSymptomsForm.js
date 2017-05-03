@@ -18,12 +18,12 @@ class UserSymptomsForm extends React.Component {
   render() {
 
     return (
-      <div className="ui centered very padded container">
+      <div className="ui centered container">
         <form id="user_symptoms_form" className="ui form" onSubmit={this.handleSubmit}>
           {this.props.symptoms.length === 0 ?
-            <p>No symptoms are currently being tracked. Go back to add more</p> :
+            <h3>No symptoms are currently being tracked. Go back to add more</h3> :
             <div>
-              <p>From 1 to 10, indicate the general severity of each symptom</p>
+              <h3>From 1 to 10, indicate the general severity of each symptom</h3>
               {this.props.symptoms.map(symptom =>
                 <UserSymptom
                   key={symptom._id}
@@ -35,7 +35,7 @@ class UserSymptomsForm extends React.Component {
             </div>
           }
           <div className="field">
-            <button className={classNames("ui large submit button", {blue: this.props.symptoms.length === 0}, {green: this.props.symptoms.length > 0} )}>
+            <button id="save_symptoms_button" className={classNames("ui large submit button", {blue: this.props.symptoms.length === 0}, {green: this.props.symptoms.length > 0} )}>
               {this.props.symptoms.length > 0 ? "Save Symptoms" : "Go Back"}
             </button>
           </div>

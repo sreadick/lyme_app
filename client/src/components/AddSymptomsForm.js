@@ -8,8 +8,8 @@ class AddSymptomsForm extends React.Component {
         <form id="add_symptoms_form" className="ui form">
           <h3>To get started, select your symptoms from the list below:</h3>
           <div id="flex_container">
-            {this.props.commonSymptomList.map(symptomGroup =>
-              <div className="grouped inline fields">
+            {this.props.commonSymptomList.map((symptomGroup, index) =>
+              <div className="grouped inline fields" key={index}>
                 <label htmlFor={symptomGroup[0].category}>{symptomGroup[0].category} :</label>
                 {symptomGroup.map(symptom =>
                   <SymptomCheckbox key={symptom._id} name={symptom.category} symptom={symptom} toggleSelectedSymptom={this.props.toggleSelectedSymptom} />

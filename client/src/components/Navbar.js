@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Redirect } from 'react-router-dom';
 import HomePage from './HomePage';
 import LoginPage from '../containers/LoginPage';
 import SignUpPage from '../containers/SignUpPage';
@@ -7,6 +7,8 @@ import DashboardPage from '../containers/DashboardPage';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { loginUser, logoutUser } from '../actions';
+
+// {this.props.user.currentUser && <NavLink className="item" activeClassName="active" exact to="/symptoms">My Symptoms</NavLink> }
 
 class Navbar extends Component {
   constructor(props) {

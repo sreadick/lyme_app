@@ -1,6 +1,10 @@
 import { LOGIN_REQUESTED, LOGIN_SUCCESS, LOGIN_FAILURE, LOGOUT_REQUEST, LOGOUT_SUCCESS } from '../actions';
-const INITIAL_STATE = { isFetching: false, isAuthenticated: false, errors: {} }
-// const INITIAL_STATE = { isFetching: false, isAuthenticated: localStorage.getItem('token') ? true : false };
+const INITIAL_STATE = {
+  isFetching: false,
+  isAuthenticated: !!localStorage.getItem('token') ? true : false ,
+  errors: {}, token: (localStorage.getItem('token') || null),
+  creds: null
+}
 
 const auth = (state = INITIAL_STATE, action) => {
   switch(action.type) {
